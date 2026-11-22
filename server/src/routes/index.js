@@ -17,8 +17,20 @@ const { sendMedia, storageMode } = require('../services/storage');
 
 // Shows which AWS pieces are live: RDS connection and S3 vs local storage.
 router.get('/health', async (_req, res) => {
-  try { await query('SELECT 1'); res.json({ ok: true, database: 'connected', storage: storageMode }); }
-  catch (e) { res.status(503).json({ ok: false, database: 'down', storage: storageMode }); }
+  const start = Date.now();
+  try {
+    await query('SELECT 1');
+    const latency = Date.now() - start;
+    res.json({
+      ok: true,
+      database: 'connected',
+      dbLatencyMs: latency,
+      storage: storageMode,
+      uptimeSeconds: Math.floor(process.uptime()),
+    });
+  } catch (e) {
+    res.status(503).json({ ok: false, database: 'down', error: e.message, storage: storageMode });
+  }
 });
 
 // Public image proxy (private S3 bucket). Keys look like avatars/xxx.jpg or gigs/xxx.jpg

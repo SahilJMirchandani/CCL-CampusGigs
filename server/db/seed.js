@@ -13,8 +13,8 @@ const PASSWORD = 'demo1234';
 async function mkUser(name, email, profile) {
   const u = await withTx((c) => createUser(c, { name, email, password: PASSWORD }));
   await query(
-    `UPDATE users SET headline=$2, bio=$3, department=$4, year_of_study=$5, skills=$6 WHERE id=$1`,
-    [u.id, profile.headline, profile.bio, profile.department, profile.year, profile.skills]
+    `UPDATE users SET headline=$2, bio=$3, department=$4, year_of_study=$5, skills=$6, avatar=$7 WHERE id=$1`,
+    [u.id, profile.headline, profile.bio, profile.department, profile.year, profile.skills, profile.avatar || null]
   );
   return u.id;
 }
@@ -25,9 +25,9 @@ const topup = (userId, amount) =>
 async function mkGig(posterId, g) {
   return withTx(async (c) => {
     const { rows } = await c.query(
-      `INSERT INTO gigs (poster_id,title,description,category,budget,deadline)
-       VALUES ($1,$2,$3,$4,$5, current_date + $6::int) RETURNING id`,
-      [posterId, g.title, g.description, g.category, g.budget, g.inDays ?? 7]
+      `INSERT INTO gigs (poster_id,title,description,category,budget,deadline,image_url)
+       VALUES ($1,$2,$3,$4,$5, current_date + $6::int, $7) RETURNING id`,
+      [posterId, g.title, g.description, g.category, g.budget, g.inDays ?? 7, g.imageUrl || null]
     );
     await addXp(c, posterId, XP_REWARDS.postGig);
     return rows[0].id;

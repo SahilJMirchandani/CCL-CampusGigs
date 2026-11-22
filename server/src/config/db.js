@@ -4,6 +4,9 @@ const env = require('./env');
 const pool = new Pool({
   connectionString: env.databaseUrl,
   ssl: env.dbSsl ? { rejectUnauthorized: false } : undefined,
+  max: 20, // Max active clients in pool
+  idleTimeoutMillis: 30000, // Close idle clients after 30s
+  connectionTimeoutMillis: 5000, // Timeout after 5s if RDS cannot connect
 });
 
 pool.on('error', (err) => console.error('Unexpected Postgres error', err.message));
