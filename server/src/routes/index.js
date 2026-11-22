@@ -36,7 +36,7 @@ router.get('/health', async (_req, res) => {
 // Public image proxy (private S3 bucket). Keys look like avatars/xxx.jpg or gigs/xxx.jpg
 router.get('/media/:folder/:file', async (req, res) => {
   const { folder, file } = req.params;
-  if (!['avatars', 'gigs'].includes(folder) || !/^[\w.-]+$/.test(file)) return res.status(404).end();
+  if (!['avatars', 'gigs', 'attachments', 'banners', 'system'].includes(folder) || !/^[\w.-]+$/.test(file)) return res.status(404).end();
   try { await sendMedia(`${folder}/${file}`, res); } catch { if (!res.headersSent) res.status(404).end(); }
 });
 router.get('/meta', (_req, res) =>
