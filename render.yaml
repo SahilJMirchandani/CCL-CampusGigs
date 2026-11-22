@@ -29,4 +29,3 @@ databases:
     plan: free
     region: oregon
     databaseName: campusgigs
-    user: postgres
