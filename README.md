@@ -1,5 +1,7 @@
 # CampusGigs
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/SahilJMirchandani/CCL-CampusGigs)
+
 A campus gig marketplace where students post tasks, bid on each other's work, and get paid safely through **escrow** using **GigCoins**.
 
 Built for the SEA Lab micro project, following the blueprint: basic web functionality + one unique feature (escrow).
