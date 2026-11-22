@@ -1,0 +1,32 @@
+services:
+  # Web Service running Node.js (Serves both Express API and React frontend)
+  - type: web
+    name: campusgigs
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm run install:all && npm run build
+    startCommand: npm run db:setup && cd server && node src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_SSL
+        value: true
+      - key: ALLOWED_DOMAINS
+        value: ves.ac.in
+      - key: DATABASE_URL
+        fromDatabase:
+          name: campusgigs-db
+          property: connectionString
+
+databases:
+  # Managed PostgreSQL instance on Render
+  - name: campusgigs-db
+    plan: free
+    region: oregon
+    databaseName: campusgigs
+    user: postgres
