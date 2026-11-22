@@ -44,6 +44,23 @@ async function ensureDatabase() {
     } else {
       console.log('Skipped demo data (users already exist or --no-seed)');
     }
+
+    // Ensure all demo users and gigs have media populated
+    await pool.query(`
+      UPDATE users SET avatar = '/api/media/avatars/aarav-sharma.svg' WHERE email = 'aarav@ves.ac.in' AND (avatar IS NULL OR avatar = '');
+      UPDATE users SET avatar = '/api/media/avatars/meera-iyer.svg' WHERE email = 'meera@ves.ac.in' AND (avatar IS NULL OR avatar = '');
+      UPDATE users SET avatar = '/api/media/avatars/rohan-patil.svg' WHERE email = 'rohan@ves.ac.in' AND (avatar IS NULL OR avatar = '');
+      UPDATE users SET avatar = '/api/media/avatars/sana-khan.svg' WHERE email = 'sana@ves.ac.in' AND (avatar IS NULL OR avatar = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/fest-logo-design.svg' WHERE title ILIKE '%logo%' AND (image_url IS NULL OR image_url = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/react-landing-page.svg' WHERE title ILIKE '%landing page%' AND (image_url IS NULL OR image_url = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/resume-cleanup.svg' WHERE title ILIKE '%resume%' AND (image_url IS NULL OR image_url = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/hostel-reel-edit.svg' WHERE title ILIKE '%reel%' AND (image_url IS NULL OR image_url = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/research-paper-proofread.svg' WHERE title ILIKE '%paper%' AND (image_url IS NULL OR image_url = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/dsa-tutoring.svg' WHERE title ILIKE '%dsa%' AND (image_url IS NULL OR image_url = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/hackathon-poster.svg' WHERE title ILIKE '%poster%' AND (image_url IS NULL OR image_url = '');
+      UPDATE gigs SET image_url = '/api/media/gigs/fest-logo-design.svg' WHERE image_url IS NULL OR image_url = '';
+    `);
+    console.log('Media synchronized for all seed users and marketplace gigs.');
   } catch (e) {
     console.error('\nSetup failed:', e.message);
     if (e.code === 'ECONNREFUSED') console.error('Postgres is not running or DATABASE_URL has the wrong host/port.');

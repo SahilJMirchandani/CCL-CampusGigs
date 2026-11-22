@@ -1,0 +1,16 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='600' height='340' viewBox='0 0 600 340'>
+    <defs>
+      <linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'>
+        <stop offset='0%' style='stop-color:#0D9488;stop-opacity:1' />
+        <stop offset='100%' style='stop-color:#0F766E;stop-opacity:1' />
+      </linearGradient>
+    </defs>
+    <rect width='600' height='340' rx='16' fill='url(#grad)' />
+    <g fill='#FFFFFF' opacity='0.15'>
+      <circle cx='50' cy='50' r='100' />
+      <circle cx='550' cy='290' r='120' />
+    </g>
+    <text x='300' y='150' font-family='system-ui, sans-serif' font-size='54' text-anchor='middle' fill='#FFFFFF'>🧠</text>
+    <text x='300' y='210' font-family='system-ui, -apple-system, sans-serif' font-size='24' font-weight='bold' text-anchor='middle' fill='#FFFFFF'>DSA & Algorithms Tutoring</text>
+    <text x='300' y='245' font-family='system-ui, sans-serif' font-size='14' opacity='0.85' text-anchor='middle' fill='#FFFFFF'>CampusGigs • AWS Cloud Storage</text>
+  </svg>

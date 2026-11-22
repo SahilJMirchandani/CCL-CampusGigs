@@ -68,46 +68,50 @@ module.exports = async function seed() {
     headline: 'Full-stack tinkerer · React + Node',
     bio: 'Third-year Computer Engineering student who loves shipping small web apps. Happy to help with websites, bug fixes and DSA basics.',
     department: 'Computer Engineering', year: 'Third year', skills: ['React', 'Node.js', 'PostgreSQL', 'DSA'],
+    avatar: '/api/media/avatars/aarav-sharma.svg'
   });
   const meera = await mkUser('Meera Iyer', 'meera@ves.ac.in', {
     headline: 'UI designer · Figma · branding',
     bio: 'I design posters, logos and clean app screens for college fests and clubs.',
     department: 'Information Technology', year: 'Second year', skills: ['Figma', 'Illustration', 'Branding'],
+    avatar: '/api/media/avatars/meera-iyer.svg'
   });
   const rohan = await mkUser('Rohan Patil', 'rohan@ves.ac.in', {
     headline: 'Writer & researcher',
     bio: 'Technical writing, report editing and slide decks that actually make sense.',
     department: 'Electronics & Telecom', year: 'Final year', skills: ['Writing', 'Research', 'PowerPoint'],
+    avatar: '/api/media/avatars/rohan-patil.svg'
   });
   const sana = await mkUser('Sana Khan', 'sana@ves.ac.in', {
     headline: 'Video editor · reels & event recaps',
     bio: 'Premiere Pro, After Effects and a good eye for pacing.',
     department: 'Computer Engineering', year: 'Second year', skills: ['Premiere Pro', 'After Effects', 'Photography'],
+    avatar: '/api/media/avatars/sana-khan.svg'
   });
 
   await topup(rohan, 300);
   await topup(meera, 500);
 
   // History: finished work spread across the last weeks
-  await runCompleted(aarav, sana, { title: 'Logo for the college fest', description: 'Need a bold, colourful logo for our tech fest. Two concepts and final files in PNG + SVG.', category: 'Design', budget: 500 }, 400, 6);
-  await runCompleted(meera, aarav, { title: 'Resume review and cleanup', description: 'Tidy up my resume layout and tighten the wording for internships.', category: 'Writing', budget: 200 }, 180, 3);
-  await runCompleted(rohan, aarav, { title: 'Slide deck for project review', description: 'Turn my report into a clean 12-slide deck with a consistent theme.', category: 'Design', budget: 350 }, 300, 0);
+  await runCompleted(aarav, sana, { title: 'Logo for the college fest', description: 'Need a bold, colourful logo for our tech fest. Two concepts and final files in PNG + SVG.', category: 'Design', budget: 500, imageUrl: '/api/media/gigs/fest-logo-design.svg' }, 400, 6);
+  await runCompleted(meera, aarav, { title: 'Resume review and cleanup', description: 'Tidy up my resume layout and tighten the wording for internships.', category: 'Writing', budget: 200, imageUrl: '/api/media/gigs/resume-cleanup.svg' }, 180, 3);
+  await runCompleted(rohan, aarav, { title: 'Slide deck for project review', description: 'Turn my report into a clean 12-slide deck with a consistent theme.', category: 'Design', budget: 350, imageUrl: '/api/media/gigs/fest-logo-design.svg' }, 300, 0);
 
   // Live escrow examples
-  const proof = await mkGig(rohan, { title: 'Proofread my research paper', description: 'A 6-page paper needs grammar and flow fixes. Track changes please.', category: 'Writing', budget: 300, inDays: 4 });
+  const proof = await mkGig(rohan, { title: 'Proofread my research paper', description: 'A 6-page paper needs grammar and flow fixes. Track changes please.', category: 'Writing', budget: 300, inDays: 4, imageUrl: '/api/media/gigs/research-paper-proofread.svg' });
   await escrow.acceptBid(rohan, await bid(proof, aarav, 250, 'I can finish this by tomorrow evening.', 2));
 
-  const reel = await mkGig(sana, { title: 'Edit a 60-second hostel reel', description: 'Raw clips ready. Need cuts, music sync and subtitles.', category: 'Video & Photo', budget: 400, inDays: 5 });
+  const reel = await mkGig(sana, { title: 'Edit a 60-second hostel reel', description: 'Raw clips ready. Need cuts, music sync and subtitles.', category: 'Video & Photo', budget: 400, inDays: 5, imageUrl: '/api/media/gigs/hostel-reel-edit.svg' });
   await escrow.acceptBid(sana, await bid(reel, aarav, 350, 'Done this kind of edit before, quick turnaround.', 3));
   await escrow.deliver(aarav, reel, 'Final cut uploaded: drive.example/hostel-reel-final. Subtitles included.');
 
   // Open gigs with competing bids (the 500 -> 450 vs 400 story)
-  const page = await mkGig(meera, { title: 'Landing page in React for a club', description: 'Single landing page with sections for events, team and contact. Mobile friendly.', category: 'Development', budget: 800, inDays: 10 });
+  const page = await mkGig(meera, { title: 'Landing page in React for a club', description: 'Single landing page with sections for events, team and contact. Mobile friendly.', category: 'Development', budget: 800, inDays: 10, imageUrl: '/api/media/gigs/react-landing-page.svg' });
   await bid(page, aarav, 700, 'I can build this with Vite + React, clean and responsive.', 5);
   await bid(page, rohan, 650, 'I can handle the content and the page build.', 6);
 
-  await mkGig(aarav, { title: 'DSA basics tutor (arrays and recursion)', description: 'Need two one-hour sessions to get comfortable with arrays, recursion and complexity.', category: 'Tutoring', budget: 600, inDays: 9 });
-  const poster = await mkGig(meera, { title: 'Poster design for hackathon', description: 'A3 poster, bold typography, our brand colours are lilac and mint.', category: 'Design', budget: 250, inDays: 6 });
+  await mkGig(aarav, { title: 'DSA basics tutor (arrays and recursion)', description: 'Need two one-hour sessions to get comfortable with arrays, recursion and complexity.', category: 'Tutoring', budget: 600, inDays: 9, imageUrl: '/api/media/gigs/dsa-tutoring.svg' });
+  const poster = await mkGig(meera, { title: 'Poster design for hackathon', description: 'A3 poster, bold typography, our brand colours are lilac and mint.', category: 'Design', budget: 250, inDays: 6, imageUrl: '/api/media/gigs/hackathon-poster.svg' });
   await bid(poster, sana, 220, 'I love poster work! Two drafts included.', 2);
 
   const old = await mkGig(rohan, { title: 'Translate notes to Marathi', description: 'Plans changed, no longer needed.', category: 'Writing', budget: 150 });
