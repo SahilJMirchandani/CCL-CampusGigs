@@ -1,10 +1,77 @@
-# CampusGigs
+# CampusGigs - Cloud Computing Lab (CCL) Project
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/SahilJMirchandani/CCL-CampusGigs)
+[![Live on Render](https://img.shields.io/badge/Render-Live%20Deployment-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://campusgigs-u70p.onrender.com)
+[![AWS Architecture](https://img.shields.io/badge/AWS-EC2%20%7C%20RDS%20%7C%20S3-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://github.com/SahilJMirchandani/CCL-CampusGigs)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-SahilJMirchandani%2FCCL--CampusGigs-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SahilJMirchandani/CCL-CampusGigs)
 
-A campus gig marketplace where students post tasks, bid on each other's work, and get paid safely through **escrow** using **GigCoins**.
+A full-stack cloud campus gig marketplace where students post tasks, bid on each other's work, and get paid safely through **escrow** using **GigCoins**.
 
-Built for the SEA Lab micro project, following the blueprint: basic web functionality + one unique feature (escrow).
+- **Live Render Web Application**: [https://campusgigs-u70p.onrender.com](https://campusgigs-u70p.onrender.com)
+- **Live Health Endpoint**: [https://campusgigs-u70p.onrender.com/api/health](https://campusgigs-u70p.onrender.com/api/health)
+- **Primary AWS Infrastructure**: EC2 (`t2.micro`), RDS PostgreSQL (`db.t3.micro`), and S3 (`campusgigs-sahil-779634-images`).
+
+---
+
+## Cloud Architecture (AWS Well-Architected 3-Tier Pattern)
+
+CampusGigs implements a 3-tier cloud architecture designed for scalability, security, and cost efficiency:
+
+```mermaid
+graph TD
+    Client["Client Browser / Student UI"] -->|HTTPS / Port 443| LB["Render / Nginx Reverse Proxy (Port 80)"]
+    LB -->|Internal Port 5000| EC2["Compute Tier: Node.js Express App (EC2 t2.micro)"]
+    EC2 -->|IAM LabRole / SigV4| S3["Storage Tier: Amazon S3 (Private Bucket)"]
+    EC2 -->|PostgreSQL Port 5432 / SSL| RDS["Database Tier: Amazon RDS PostgreSQL (db.t3.micro)"]
+    S3 -.->|Streams Preserved Media| Client
+```
+
+### AWS Cloud Components
+| AWS Service | Resource Name / ID | Purpose | Security Configuration |
+|---|---|---|---|
+| **Amazon EC2** | `campusgigs-ec2` (`i-0f43f926cc8dec556`) | Application Compute (Node.js/Express) | Security Group `ec2-sg` (Ports 80, 5000, 22), IAM Role `LabRole` |
+| **Amazon RDS** | `campusgigs-db` (`db.t3.micro`) | Relational Data Store (PostgreSQL 16) | Security Group `rds-sg` (Restricted to `ec2-sg` on port 5432), SSL Enabled |
+| **Amazon S3** | `campusgigs-sahil-779634-images` | Media & Document Storage | Private Bucket (Block Public Access ON), SSE-S3 Encryption, Lifecycle Policy |
+| **AWS IAM** | `LabInstanceProfile` (`LabRole`) | Keyless EC2 Authentication | SigV4 instance credentials; zero secrets stored in code |
+
+### Amazon S3 Object Hierarchy
+All media uploaded through the app or seed data is stored in the private Amazon S3 bucket under organized prefix paths:
+
+```
+s3://campusgigs-sahil-779634-images/
+├── avatars/               # User profile pictures (Aarav, Meera, Rohan, Sana)
+│   ├── aarav-sharma.svg
+│   ├── meera-iyer.svg
+│   ├── rohan-patil.svg
+│   └── sana-khan.svg
+├── gigs/                  # Marketplace task covers by category
+│   ├── fest-logo-design.svg
+│   ├── react-landing-page.svg
+│   ├── research-paper-proofread.svg
+│   ├── hostel-reel-edit.svg
+│   ├── dsa-tutoring.svg
+│   ├── hackathon-poster.svg
+│   ├── resume-cleanup.svg
+│   ├── aws-cloud-consultation.svg
+│   └── data-analysis-sql.svg
+├── attachments/           # Deliverables & student project specs
+│   ├── sample-project-spec.svg
+│   ├── wireframe-flowchart.svg
+│   └── resume-template.svg
+├── banners/               # Campus marketing & event header banners
+│   ├── welcome-ccl-2026.svg
+│   └── cloud-computing-lab.svg
+└── system/                # Health & metadata heartbeat
+    └── status.json
+```
+
+#### Uploading / Synchronizing Assets to S3:
+1. **AWS Console (1-Click Drag & Drop)**:
+   - In AWS Management Console, navigate to **Amazon S3** → `campusgigs-sahil-779634-images`.
+   - Click **Upload** → drag and drop the `server/uploads/` directory folders (`avatars`, `gigs`, `attachments`, `banners`, `system`).
+2. **Automated CLI / EC2 Script**:
+   - On Windows: Run `aws/upload-media-to-s3.bat`.
+   - On EC2 / Linux: Run `bash aws/upload-media-to-s3.sh` (utilizes the attached IAM `LabRole` automatically).
+
 
 **Stack:** React 18 + Vite · Node.js + Express · PostgreSQL · JWT · bcryptjs
 

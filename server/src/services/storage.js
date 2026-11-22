@@ -8,8 +8,8 @@ const { HttpError } = require('../utils/httpError');
 // On EC2 the SDK reads credentials from the instance's IAM role (LabRole). No keys in code.
 const s3 = env.s3Bucket ? new S3Client({ region: env.awsRegion }) : null;
 const LOCAL_DIR = path.join(__dirname, '..', '..', 'uploads');
-const EXT = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/svg+xml': 'svg' };
-const TYPE = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp', svg: 'image/svg+xml' };
+const EXT = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/svg+xml': 'svg', 'application/json': 'json' };
+const TYPE = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp', svg: 'image/svg+xml', json: 'application/json' };
 
 /** Saves a base64 data URL to S3 (or local disk in dev) and returns a stable URL like /api/media/gigs/abc.jpg */
 async function saveDataUrl(dataUrl, folder) {

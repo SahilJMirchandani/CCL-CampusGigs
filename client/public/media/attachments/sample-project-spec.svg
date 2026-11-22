@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#334155;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E293B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="340" rx="16" fill="url(#grad)" />
+  <g fill="#FFFFFF" opacity="0.12">
+    <circle cx="40" cy="40" r="80" />
+    <circle cx="560" cy="300" r="110" />
+  </g>
+  <text x="300" y="150" font-family="system-ui, sans-serif" font-size="52" text-anchor="middle" fill="#FFFFFF">📋</text>
+  <text x="300" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Project Specifications & Requirements</text>
+  <text x="300" y="245" font-family="system-ui, sans-serif" font-size="13" opacity="0.85" text-anchor="middle" fill="#FFFFFF">Deliverable • Architecture Diagram</text>
+</svg>

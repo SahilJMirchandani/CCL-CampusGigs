@@ -35,7 +35,7 @@ exports.updateMe = asyncHandler(async (req, res) => {
   let avatar = b.avatar;
   if (avatar === '' || avatar === null) avatar = null;
   else if (avatar !== undefined) {
-    const okData = /^data:image\/(png|jpe?g|webp);base64,/.test(avatar) && avatar.length < 700_000;
+    const okData = /^data:image\/(png|jpe?g|webp|svg\+xml);base64,/.test(avatar) && avatar.length < 700_000;
     const okUrl = /^(https?:\/\/|\/api\/media\/)\S+$/.test(avatar) && avatar.length < 500;
     if (!okData && !okUrl) throw new HttpError(400, 'Profile photo must be a small PNG, JPG or WebP image');
   }

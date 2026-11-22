@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS gigs (
 CREATE INDEX IF NOT EXISTS idx_gigs_status   ON gigs(status);
 CREATE INDEX IF NOT EXISTS idx_gigs_poster   ON gigs(poster_id);
 CREATE INDEX IF NOT EXISTS idx_gigs_assigned ON gigs(assigned_to);
+CREATE INDEX IF NOT EXISTS idx_gigs_category ON gigs(category);
+CREATE INDEX IF NOT EXISTS idx_users_email   ON users(email);
 
 CREATE TABLE IF NOT EXISTS bids (
   id             SERIAL PRIMARY KEY,
@@ -56,6 +58,7 @@ CREATE TABLE IF NOT EXISTS bids (
   UNIQUE (gig_id, bidder_id)
 );
 CREATE INDEX IF NOT EXISTS idx_bids_bidder ON bids(bidder_id);
+CREATE INDEX IF NOT EXISTS idx_bids_gig    ON bids(gig_id);
 
 -- Wallet ledger. amount is the signed effect on the user's AVAILABLE balance.
 CREATE TABLE IF NOT EXISTS transactions (
